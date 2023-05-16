@@ -1,0 +1,1 @@
+gcc-9 -o testOS ./src/**.c ./src/**.h -lpthread
