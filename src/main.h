@@ -4,6 +4,8 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <ctype.h>
+
 #ifndef MAIN_H_
 #define MAIN_H_
 #define DEFAULT printf("%c[%dm", 0x1B, 0)
@@ -101,8 +103,9 @@ int pwd(DirectoryTree *p_directoryTree, Stack *p_directoryStack, char *command);
 int ls(DirectoryTree *p_directoryTree, char *command);
 int cat(DirectoryTree *p_directoryTree, char *command);
 int chmod(DirectoryTree *p_directoryTree, char *command);
-int chown_(DirectoryTree *p_directoryTree, char *command);
+int chown(DirectoryTree *p_directoryTree, char *command);
 int find_(DirectoryTree *p_directoryTree, char *command);
+void grep(char *command, char* Word_Search, char* f_name);
 
 // init.c
 void init(DirectoryTree *p_directoryTree, char *command);
@@ -150,6 +153,9 @@ void change_all_owner(DirectoryNode *p_directoryNode, char *userName);
 // find
 int read_directory(DirectoryTree *p_directoryTree, char *tmp, char *directoryName, int o);
 void find_directory(DirectoryTree *p_directoryTree, char *directoryName, int o);
+// grep
+int strncasecmp(const char* str1, const char* str2, size_t n);
+char *strcasestr(const char *haystack, const char *needle);
 
 // user.c
 UserList *initialize_user();

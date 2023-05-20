@@ -907,3 +907,32 @@ void copy_directory(DirectoryTree *p_directoryTree, DirectoryNode *p_directoryNo
         copy_directory(p_directoryTree, p_directoryNode->RightSibling, p_directoryNode->RightSibling->name, p_directoryNode->RightSibling->type, level);
     }
 }
+
+// grep
+int strncasecmp(const char* str1, const char* str2, size_t n) {
+	for (size_t i = 0; i < n; ++i) {
+		char c1 = tolower(str1[i]);
+		char c2 = tolower(str2[i]);
+
+		if (c1 == '\0' || c2 == '\0' || c1 != c2) {
+			return c1 - c2;
+		}
+	}
+
+	return 0;
+}
+
+char *strcasestr(const char *haystack, const char *needle)
+{
+	int size = strlen(needle);
+
+	while (*haystack)
+	{
+		if (strncasecmp(haystack, needle, size) == 0)
+		{
+			return (char *)haystack;
+		}
+		haystack++;
+	}
+	return NULL;
+}

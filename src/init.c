@@ -99,12 +99,30 @@ void init(DirectoryTree *p_directoryTree, char *command) {
     } else if (strcmp(str, "find") == 0) {
         str = strtok(NULL, " ");
         find_(p_directoryTree, str);
-    } else if (strcmp(command, "exit") == 0) {
-        printf("로그아웃\n");
-        exit(0);
-    } else {
-        printf("'%s': 명령을 찾을 수 없습니다\n", command);
-    }
+    } 
+
+	// 파일 권한 변경 chown
+	else if (strcmp(str, "chown") == 0) {
+		str = strtok(NULL, " ");
+		isDirectoryExist = chown(p_directoryTree, str);
+		if (isDirectoryExist == 0) {
+			save_directory(p_directoryTree, gp_directoryStack);
+		}
+
+	// 파일 내의 텍스트 찾기 grep
+	else if (strcmp(str, "grep") == 0) {
+		str = strtok(NULL, " ");
+		grep(p_directoryTree, gp_directoryStack, str);
+
+	// 종료
+	else if (strcmp(command, "exit") == 0) {
+		printf("로그아웃\n");
+		exit(0);
+	}
+		else {
+			printf("'%s': 명령을 찾을 수 없습니다\n", command);
+		}
+
     return;
 }
 
