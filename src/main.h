@@ -103,9 +103,9 @@ int pwd(DirectoryTree *p_directoryTree, Stack *p_directoryStack, char *command);
 int ls(DirectoryTree *p_directoryTree, char *command);
 int cat(DirectoryTree *p_directoryTree, char *command);
 int chmod(DirectoryTree *p_directoryTree, char *command);
-int chown(DirectoryTree *p_directoryTree, char *command);
+int chown_(DirectoryTree *p_directoryTree, char *command);
 int find_(DirectoryTree *p_directoryTree, char *command);
-void grep(char *command, char* Word_Search, char* f_name);
+int grep(char* command);
 
 // init.c
 void init(DirectoryTree *p_directoryTree, char *command);

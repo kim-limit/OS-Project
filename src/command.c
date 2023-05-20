@@ -1080,11 +1080,10 @@ int find_(DirectoryTree *p_directoryTree, char *command) {
 }
 
 
-int chown(DirectoryTree *p_directoryTree, char *command);
-{
+int chown_(DirectoryTree *p_directoryTree, char *command) {
 	DirectoryNode* tmpNode = NULL;
 	UserNode* tmpUser = NULL;
-	char * str;
+	char *str;
 	char tmp[MAX_NAME_SIZE];		// user 정보 저장
 
 	if (command == NULL)
@@ -1102,7 +1101,6 @@ int chown(DirectoryTree *p_directoryTree, char *command);
 			printf("Try 'chown --help' for more information.\n");
 			return -1;
 		}
-		tmpUser = is_exist_user(usrList, str);
 		if (tmpUser != NULL)
 		{
 			strncpy(tmp, str, MAX_NAME_SIZE);
@@ -1112,7 +1110,6 @@ int chown(DirectoryTree *p_directoryTree, char *command);
 			printf("chown: '%s' 유저가 존재하지 않습니다\n", str);
 			return -1;
 		}
-		str = strok(NULL, " ");
 		if (str == NULL)
 		{
 			printf("chown: 잘못된 연산자\n");
@@ -1120,10 +1117,10 @@ int chown(DirectoryTree *p_directoryTree, char *command);
 			return -1;
 		}
 
-		tmpNode = is_exist_directory(*p_directoryTree, str, 'd');
+		tmpNode = is_exist_directory(p_directoryTree, str, 'd');
 		if (tmpNode != NULL)
 		{
-			change_owner(*p_directoryTree, tmp, str);
+			change_owner(p_directoryTree, tmp, str);
 			change_all_owner(tmpNode->LeftChild, tmp);
 		}
 		else
@@ -1152,75 +1149,124 @@ int chown(DirectoryTree *p_directoryTree, char *command);
 		}
 		else
 		{
-			change_owner(*p_directoryTree, tmp, str);
+			change_owner(p_directoryTree, tmp, str);
 		}
 		return 0;
 	}
+}
 
-	void grep(char *command, char* Word_Search, char* f_name)
+int grep(char *command){
+	int i = 1;
+	char output_line[MAX_LENGTH_SIZE];
+    char *pattern;
+    char *f_name;
+
+    if (command == NULL)
 	{
-		int i = 1;
-		char output_line[MAX_LENGTH_SIZE];
-		FILE* fp = fopen(f_name, "rt");
-		if (fp == NULL)
-			printf("해당하는 파일이 없습니다\n");
+		printf("grep: 잘못된 연산자\n");
 		printf("Try 'grep --help' for more information.\n");
-		exit(1);
-		while (1) {
-			if (feof(fp))
-				break;
-			else
-				fgets(output_line, sizeof(output_line), fp);
-			i++;
-		}
-		FILE* fp2 = NULL;
-		fp2 = fopen(f_name, "rt");
-
-		if (strcmp(command, "-n") == 0)
-		{
-			for (int j = 1; j < i - 1; j++)
-			{
-				fgets(output_line, sizeof(output_line), fp2);
-				if (strstr(output_line, Word_Search) != NULL)
-					printf("%d: %s", j, output_line);
-			}
-		}
-		else if (strcmp(command, "-v") == 0)
-		{
-			for (int j = 1; j < i - 1; j++)
-			{
-				fgets(output_line, sizeof(output_line), fp2);
-				if (strstr(output_line, Word_Search) == NULL)
-					printf("%s", output_line);
-			}
-		}
-		else if (strcmp(command, "-i") == 0)
-		{
-			for (int j = 1; j < i - 1; j++)
-			{
-				fgets(output_line, sizeof(output_line), fp2);
-				if (strcasestr(output_line, Word_Search) != NULL)
-					printf("%s", output_line);
-			}
-		}
-		else if (strcmp(command, "--help") == 0)
-		{
-			printf("사용법: grep [옵션]... [패턴]...[파일명]");
-			printf("  Find a pattern in the File.\n\n");
-			printf("  Options:\n");
-			printf("    -n, print the line with line number\n");
-			printf("    -v, print only the contents that do not contain the pattern\n");
-			printf("    -i, matches a pattern regardless of case\n");
-			printf("        --help\t 이 도움말을 표시하고 끝냅니다\n");
-		}
-		else
-		{
-			for (int j = 1; j < i - 1; j++) {
-				fgets(output_line, sizeof(output_line), fp2);
-				if (strstr(output_line, Word_Search) != NULL)
-					printf("%s", output_line);
-			}
-			return 0;
-		}
-		fclose(fp);
+        return -1;
 	}
+	if (strcmp(command, "-n") == 0)
+	{
+        pattern = strtok(NULL, " ");
+        f_name = strtok(NULL, " ");
+		FILE *fp = fopen(f_name,"rt");
+        if(fp==NULL)
+        printf("cannot read the file\n");
+        while(1){
+            if(feof(fp))
+                break;
+            else
+                fgets(output_line,sizeof(output_line),fp);
+        i++;
+        }
+        FILE *fp2=NULL;
+        fp2=fopen(f_name,"rt");
+        for(int j=1;j<i-1;j++){
+            fgets(output_line,sizeof(output_line),fp2);
+            if(strstr(output_line,pattern)!=NULL)
+                printf("%d:%s",j,output_line);
+        }
+        fclose(fp);
+	}
+	else if (strcmp(command, "-v") == 0)
+	{
+        pattern = strtok(NULL, " ");
+        f_name = strtok(NULL, " ");
+		FILE *fp = fopen(f_name,"rt");
+        if(fp==NULL)
+        printf("cannot read the file\n");
+        while(1){
+            if(feof(fp))
+                break;
+            else
+                fgets(output_line,sizeof(output_line),fp);
+        i++;
+        }
+        FILE *fp2=NULL;
+        fp2=fopen(f_name,"rt");
+		for (int j = 1; j < i - 1; j++)
+		{
+			fgets(output_line, sizeof(output_line), fp2);
+			if (strstr(output_line, pattern) == NULL)
+				printf("%s", output_line);
+		}
+	}
+	else if (strcmp(command, "-i") == 0)
+	{
+        pattern = strtok(NULL, " ");
+        f_name = strtok(NULL, " ");
+		FILE *fp = fopen(f_name,"rt");
+        if(fp==NULL)
+        printf("cannot read the file\n");
+        while(1){
+            if(feof(fp))
+                break;
+            else
+                fgets(output_line,sizeof(output_line),fp);
+        i++;
+        }
+        FILE *fp2=NULL;
+        fp2=fopen(f_name,"rt");
+		for (int j = 1; j < i - 1; j++)
+		{
+			fgets(output_line, sizeof(output_line), fp2);
+			if (strcasestr(output_line, pattern) != NULL)
+				printf("%s", output_line);
+		}
+	}
+	else if (strcmp(command, "--help") == 0)
+	{
+		printf("사용법: grep [옵션]... [패턴]...[파일명]");
+		printf("  Find a pattern in the File.\n\n");
+		printf("  Options:\n");
+		printf("    -n, print the line with line number\n");
+		printf("    -v, print only the contents that do not contain the pattern\n");
+		printf("    -i, matches a pattern regardless of case\n");
+		printf("        --help\t 이 도움말을 표시하고 끝냅니다\n");
+	}
+	else
+	{
+        f_name = strtok(NULL, " ");
+    	FILE *fp = fopen(f_name,"rt");
+        if(fp==NULL)
+        printf("cannot read the file\n");
+        while(1){
+        if(feof(fp))
+            break;
+        else
+            fgets(output_line,sizeof(output_line),fp);
+        i++;
+        }
+        FILE *fp2=NULL;
+        fp2=fopen(f_name,"rt");
+        for(int j=1;j<i-1;j++){
+            fgets(output_line,sizeof(output_line),fp2);
+            if(strstr(output_line,command)!=NULL)
+            printf("%s",output_line);
+        }
+        fclose(fp);
+    }
+    return 0;
+}

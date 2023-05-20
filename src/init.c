@@ -5,6 +5,8 @@
 
 void init(DirectoryTree *p_directoryTree, char *command) {
     char *str;
+    char *str1;
+    char *str2;
     int isDirectoryExist;
     if (strcmp(command, "") == 0 || command[0] == ' ') {
         return;
@@ -26,7 +28,6 @@ void init(DirectoryTree *p_directoryTree, char *command) {
         if (isDirectoryExist == 0) {
             save_directory(p_directoryTree, gp_directoryStack);
         }
-
     // 파일 생성하기 touch [파일이름]
     // touch -t 월일시분 [파일이름] -> 생성시간 변경
     // touch -m [파일 이름] -> 서버시간으로 변경
@@ -104,16 +105,16 @@ void init(DirectoryTree *p_directoryTree, char *command) {
 	// 파일 권한 변경 chown
 	else if (strcmp(str, "chown") == 0) {
 		str = strtok(NULL, " ");
-		isDirectoryExist = chown(p_directoryTree, str);
+		isDirectoryExist = chown_(p_directoryTree, str);
 		if (isDirectoryExist == 0) {
 			save_directory(p_directoryTree, gp_directoryStack);
 		}
-
+    }
 	// 파일 내의 텍스트 찾기 grep
 	else if (strcmp(str, "grep") == 0) {
 		str = strtok(NULL, " ");
-		grep(p_directoryTree, gp_directoryStack, str);
-
+		grep(str);
+    }
 	// 종료
 	else if (strcmp(command, "exit") == 0) {
 		printf("로그아웃\n");
