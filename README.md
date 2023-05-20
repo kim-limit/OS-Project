@@ -1,6 +1,6 @@
 # OS_TEAM_PROJECT
 
-## ✅ 사용법
+## ✅ 로컬 사용법
 
 ### build
 
@@ -13,6 +13,16 @@
 ### run
 
 <pre>make run</pre>
+
+## ✅ EC2에서 사용법
+
+ec2 접속 후 프로젝트 폴더로 접근
+
+<pre>cd tmp/minios-project</pre>
+
+실행파일 실행
+
+<pre>./testOS</pre>
 
 ## ✅ 명령어 종류
 
@@ -73,10 +83,14 @@ ls
 
 ### txt파일 읽기 (cat)
 
+📌 cat으로 txt파일 읽을때는 진짜 txt 파일이 있어야함
+<br/>
+cat > 파일이름.txt 로 실제 txt 파일 생성후 cat으로 읽어야 함.
+
 <pre>
 cat [파일.txt] 
--b, -n 하면 앞에 숫자 붙음
-cat > [파일] // txt파일 생성 (마지막에 :wq 하면 끝)
+-n 하면 앞에 숫자 붙음
+cat > [파일.txt] // txt파일 생성 (마지막에 :wq 하면 실제 .txt파일 생성)
 </pre>
 
 ### 접근 권한 변경 (chmod)
@@ -99,6 +113,10 @@ chown 사용자 [파일 or 폴더명]
 </pre>
 
 ### 파일 내의 패턴 찾기 (grep)
+
+📌 grep도 txt 파일 실제 있어야함
+<br/>
+cat > 파일이름.txt 로 실제 txt 파일 생성후 cat으로 읽어야 함.
 
 <pre>
 grep [패턴] [파일명]
