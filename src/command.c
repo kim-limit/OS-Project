@@ -822,59 +822,6 @@ int cat(DirectoryTree *p_directoryTree, char *command) {
                 }
                 p_directoryTree->current = currentNode;
             }
-        } else if (strcmp(command, "-b") == 0) {
-            str = strtok(NULL, " ");
-            strncpy(tmp, str, MAX_DIRECTORY_SIZE);
-            if (strstr(str, "/") == NULL) {
-                if (is_node_has_permission(p_directoryTree->current, 'w') != 0) {
-                    printf("cat: '%s'파일을 만들 수 없음: 허가거부\n", p_directoryTree->current->name);
-                    return -1;
-                }
-                tmpNode = is_exist_directory(p_directoryTree, str, 'd');
-                tmpNode2 = is_exist_directory(p_directoryTree, str, 'f');
-                if (tmpNode == NULL && tmpNode2 == NULL) {
-                    printf("cat: '%s': 그런 파일이나 디렉터리가 없습니다\n", str);
-                    return -1;
-                } else if (tmpNode != NULL && tmpNode2 == NULL) {
-                    printf("cat: '%s': 디렉터리입니다\n", str);
-                    return -1;
-                } else if (tmpNode2 != NULL && is_node_has_permission(tmpNode2, 'r') != 0) {
-                    printf("cat: '%s'파일을 열 수 없음: 허가거부\n", tmpNode2->name);
-                    return -1;
-                } else {
-                    concatenate(p_directoryTree, str, 3);
-                }
-            } else {
-                strncpy(tmp2, get_directory(str), MAX_DIRECTORY_SIZE);
-                isDirectoryExist = move_directory_path(p_directoryTree, tmp2);
-                if (isDirectoryExist != 0) {
-                    printf("cat: '%s': 그런 파일이나 디렉터리가 없습니다\n", tmp2);
-                    return -1;
-                }
-                str = strtok(tmp, "/");
-                while (str != NULL) {
-                    strncpy(tmp3, str, MAX_NAME_SIZE);
-                    str = strtok(NULL, "/");
-                }
-                tmpNode = is_exist_directory(p_directoryTree, tmp3, 'd');
-                tmpNode2 = is_exist_directory(p_directoryTree, tmp3, 'f');
-                if (tmpNode == NULL && tmpNode2 == NULL) {
-                    printf("cat: '%s': 그런 파일이나 디렉터리가 없습니다\n", tmp3);
-                    p_directoryTree->current = currentNode;
-                    return -1;
-                } else if (tmpNode != NULL && tmpNode2 == NULL) {
-                    printf("cat: '%s': 디렉터리입니다\n", tmp3);
-                    p_directoryTree->current = currentNode;
-                    return -1;
-                } else if (tmpNode2 != NULL && is_node_has_permission(tmpNode2, 'r') != 0) {
-                    printf("cat: '%s'파일을 열 수 없음: 허가거부\n", tmpNode2->name);
-                    p_directoryTree->current = currentNode;
-                    return -1;
-                } else {
-                    concatenate(p_directoryTree, tmp3, 3);
-                }
-                p_directoryTree->current = currentNode;
-            }
         } else if (strcmp(command, "--help") == 0) {
             printf("사용법: cat [<옵션>]... [<파일>]...\n");
             printf("  FILE(들)을 합쳐서 표준 출력으로 보낸다.\n\n");
